@@ -1,0 +1,4 @@
+pfeiltasten=navigation
+nach "you win" enter drücken um weiterzuspielen
+escape zum beenden
+spezialtastenkombination zum springen

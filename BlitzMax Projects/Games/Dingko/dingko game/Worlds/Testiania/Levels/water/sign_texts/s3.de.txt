@@ -1,0 +1,4 @@
+Wenn du @b@Wasser@w@ bist hast du einen @b@Wasser-Tank@w@
+in der oberen, linken Ecke des Bildschirms.
+Du kannst dieses @b@Wasser@w@ benutzen um @r@Energie aufzuladen und zu springen@w@.
+Benutze @o@[%_sys_up%]@w@ um @r@Energie aufzuladen und zu springen@w@.

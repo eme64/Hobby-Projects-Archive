@@ -1,0 +1,1 @@
+Move left with @orange@[%_sys_left%] @white@and right with @orange@[%_sys_right%]@white@.

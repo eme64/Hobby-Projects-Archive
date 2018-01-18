@@ -1,0 +1,1 @@
+Bewege dich nach links mit @orange@[%_sys_left%] @white@und nach rechts mit @orange@[%_sys_right%]@white@.

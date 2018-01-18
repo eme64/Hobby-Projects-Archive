@@ -1,0 +1,3 @@
+Dieser @r@Steinblock@w@ ist im Weg
+Benutze @o@[%_sys_ability%] @w@um den @r@Steinblock@w@ wegzuschlagen
+wenn du selber @r@Stein@w@ bist.

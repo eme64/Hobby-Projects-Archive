@@ -1,0 +1,5 @@
+dim_briefe@4@   @   @   
+set_brief@7@12@3@brief1.txt
+set_brief@1@1@1@brief2.txt
+set_brief@16@9@2@brief3.txt
+set_ziel@10@9@@

@@ -1,0 +1,4 @@
+This @r@fire@w@ could be used to burn wood...
+Try to get these @b@blue@w@ blocks to appear.
+There is one terminal to your right, but also one to the left.
+You must turn on the @p@pink@w@ lights.

@@ -1,0 +1,4 @@
+Volle Kraft ist nicht immer die Loesung.
+In der oberen, rechten Ecke des Bildschirms kannst du das @r@Energie-Level@w@ sehen.
+Es wird aufladen, wenn du @o@[%_sys_up%]@w@ drueckst.
+Versuche die richtige Menge an Kraft zu finden.

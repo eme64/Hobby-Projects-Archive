@@ -1,0 +1,34 @@
+
+set t2 0
+
+set y 1
+
+
+:top
+
+
+set y 1
+
+pause
+
+
+
+goto_if %t2% 1 action_y
+
+goto top
+
+
+
+
+:action_y
+
+
+set y 0
+
+pause
+
+goto_if %t2% 0 top
+
+goto action_y
+
+

@@ -1,0 +1,3 @@
+Name: PLANTMONSTER
+Likes: WATER
+Accidents: NONE (TILL NOW)

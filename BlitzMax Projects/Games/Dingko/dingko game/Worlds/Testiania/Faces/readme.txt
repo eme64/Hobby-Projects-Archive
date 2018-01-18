@@ -1,0 +1,1 @@
+image resolution: 80*120

@@ -1,0 +1,24 @@
+set t1 0
+
+:base
+
+pause
+
+set t1 0
+
+goto_if %_sys_player_mode% water in
+
+goto base
+
+
+:in
+
+pause
+
+set t1 1
+
+goto_if %_sys_player_mode% normal base
+goto_if %_sys_player_mode% fire base
+goto_if %_sys_player_mode% plant base
+
+goto in

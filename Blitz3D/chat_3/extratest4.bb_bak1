@@ -1,0 +1,87 @@
+Graphics 200,200
+gw = GraphicsWidth()
+gh = GraphicsHeight()
+dw = DesktopWidth()
+dh = DesktopHeight()
+
+Window_Hide()
+Window_SetPos(100,100)
+xx=200
+yy=200
+Repeat
+	If MouseDown(1) Then
+		;Print "1"
+		m_x2=m_x
+		m_y2=m_y
+		m_x=MouseX()
+		m_y=MouseY()
+		xx=xx-m_x2+m_x
+		yy=yy-m_y2+m_y
+		Window_SetPos(xx,yy)
+	End If
+Until KeyHit(1)
+
+
+End
+
+Function DesktopWidth()
+;========================================
+; Ermittle Windows Desktopbreite
+;========================================
+	Local struct_rect% = CreateBank(16)
+
+	dll_GetWindowRect(dll_GetDesktopWindow(),struct_rect)
+	Local res = PeekInt(struct_rect,8)
+	FreeBank struct_rect
+
+	Return res
+End Function
+
+
+
+Function DesktopHeight()
+;========================================
+; Ermittle Windows Desktophöhe
+;========================================
+	Local struct_rect% = CreateBank(16)
+
+	dll_GetWindowRect(dll_GetDesktopWindow(),struct_rect)
+	Local res = PeekInt(struct_rect,12)
+	FreeBank struct_rect
+
+	Return res
+End Function
+
+
+
+Function Window_Hide()
+;========================================
+; Verstecke BB Fenster
+;========================================
+
+	Local ww% = GraphicsWidth()
+	Local wh% = GraphicsHeight()
+
+	Local xoff% = dll_GetSystemMetrics(7)
+	Local yoff% = dll_GetSystemMetrics(8) + dll_GetSystemMetrics(4)
+
+	Local hRgn% = dll_CreateRectRgn(xoff, yoff, ww+xoff, wh+yoff)
+
+	dll_SetWindowRgn(dll_GetActiveWindow(), hRgn, True)
+	dll_DeleteObject(hRgn)
+
+End Function
+
+
+
+Function Window_SetPos(x%, y%)
+;========================================
+; Setze BB Fensterposition
+;========================================
+
+	Local xoff% = dll_GetSystemMetrics(7)
+	Local yoff% = dll_GetSystemMetrics(8) + dll_GetSystemMetrics(4)
+
+	dll_SetWindowPos(dll_GetActiveWindow(),0,x-xoff,y-yoff,0,0,5)
+
+End Function

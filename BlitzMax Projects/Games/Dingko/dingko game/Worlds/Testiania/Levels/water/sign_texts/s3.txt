@@ -1,0 +1,4 @@
+If you are @b@water@w@ then you have a @b@water-tank@w@
+in the top left corner of the screen.
+You can use some of its @b@water@w@ to @r@charge and jump@w@.
+Use @o@[%_sys_up%]@w@ to @r@charge and jump@w@.

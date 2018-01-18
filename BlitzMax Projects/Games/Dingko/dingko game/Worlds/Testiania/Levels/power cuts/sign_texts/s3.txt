@@ -1,0 +1,4 @@
+If you have lost the water and can not go up on the right side,
+your watertank must be empty.
+Press @o@[%_sys_suicide%] @w@to get to the last checkpoint.
+You could also use @o@[%_sys_reload%] @w@to reload the level.

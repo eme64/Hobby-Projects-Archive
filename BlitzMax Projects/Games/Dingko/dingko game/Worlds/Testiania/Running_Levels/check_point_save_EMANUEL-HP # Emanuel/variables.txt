@@ -1,0 +1,6 @@
+door1
+1
+door2
+1
+door3
+1

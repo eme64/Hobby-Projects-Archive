@@ -1,0 +1,12 @@
+:top
+
+set v1 0
+set v2 1
+
+wait 1500
+
+set v1 1
+set v2 0
+
+wait 1500
+goto top

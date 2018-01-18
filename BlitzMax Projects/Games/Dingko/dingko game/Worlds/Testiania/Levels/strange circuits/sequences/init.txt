@@ -1,0 +1,32 @@
+lh 70 70 70
+set t1 0
+set v1 0
+set v2 1
+
+
+:top
+
+pause
+
+goto_if %t1% 1 action
+goto top
+
+
+:action
+set v1 0
+set v2 1
+sound knack1
+
+wait 1200
+
+goto_if %t1% 0 top
+
+set v1 1
+set v2 0
+sound knack1
+
+wait 1200
+
+goto_if %t1% 0 top
+
+goto action

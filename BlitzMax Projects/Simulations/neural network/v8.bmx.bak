@@ -1,0 +1,706 @@
+SuperStrict
+
+
+' ##########################################################
+
+Type TNetwork
+	Const schwellwert_0:Float = -1.0'[] = [-1.0,1.0]
+	Const schwellwert_1:Float = 1.0'[] = [-1.0,1.0]
+	
+	Field middle_layers:TLayer_Middle[]
+	Field out:TLayer
+	
+	Function Create:TNetwork(layers_info:Int[])'[3,5,5,5,5,2]
+		Local n:TNetwork = New TNetwork
+		
+		If layers_info.length < 2 Then Return Null
+		
+		n.middle_layers = New TLayer_Middle[layers_info.length-1]
+		
+		For Local i:Int = 0 To layers_info.length-2
+			n.middle_layers[i] = TLayer_Middle.Create_m(layers_info[i], layers_info[i+1])
+		Next
+		
+		n.out = TLayer.Create_l(layers_info[layers_info.length-1])
+		
+		Return n
+	End Function
+	
+	Method copy:TNetwork()
+		Local n:TNetwork = New TNetwork
+		
+		n.middle_layers = New TLayer_Middle[Self.middle_layers.length]
+		
+		For Local i:Int = 0 To Self.middle_layers.length-1
+			n.middle_layers[i] = Self.middle_layers[i].copy()
+		Next
+		
+		n.out = Self.out.copy()
+		
+		Return n
+	End Method
+	
+	Method compute:Float[](sensors:Float[])
+		
+		If sensors.length = Self.middle_layers[0].value_array.length Then
+			Self.middle_layers[0].value_array = sensors
+		Else
+			Print "wrong input"
+			Return Null
+		End If
+		
+		
+		Self.middle_layers[0].compute_start_to(Self.middle_layers[1])
+		
+		For Local i:Int = 1 To Self.middle_layers.length-2
+			Self.middle_layers[i].compute_to(Self.middle_layers[i+1])
+		Next
+		
+		Self.middle_layers[Self.middle_layers.length-1].compute_to(Self.out)
+		
+		Return Self.out.value_array
+	End Method
+	
+	
+	Method mutate()
+		If Rand(1,10)=1 Then
+			'compare
+			
+			Local i:Int = Rand(0,Self.middle_layers.length-1)
+			Local i2:Int = Rand(0,Self.middle_layers[i].compare_array.length-1)
+			
+			Self.middle_layers[i].compare_array[i2]:+Rnd(-0.1,0.1)
+			
+			If Self.middle_layers[i].compare_array[i2] < TNetwork.schwellwert_0 Then Self.middle_layers[i].compare_array[i2] = TNetwork.schwellwert_0
+			If Self.middle_layers[i].compare_array[i2] > TNetwork.schwellwert_1 Then Self.middle_layers[i].compare_array[i2] = TNetwork.schwellwert_1
+		Else
+			'verbindungen
+			Local i:Int = Rand(0,Self.middle_layers.length-1)
+			Local x:Int = Rand(0,Self.middle_layers[i].in-1)
+			Local y:Int = Rand(0,Self.middle_layers[i].out-1)
+			
+			Self.middle_layers[i].connections_feld[x,y]:+Rnd(-0.1,0.1)
+			
+			If Self.middle_layers[i].connections_feld[x,y] > 1 Then Self.middle_layers[i].connections_feld[x,y] = 1
+			If Self.middle_layers[i].connections_feld[x,y] < -1 Then Self.middle_layers[i].connections_feld[x,y] = -1
+		End If
+	End Method
+	
+	Method mutate_old()
+		If Rand(1,10)=1 Then
+			'compare
+			
+			Local i:Int = Rand(0,Self.middle_layers.length-1)
+			Local i2:Int = Rand(0,Self.middle_layers[i].compare_array.length-1)
+			
+			Self.middle_layers[i].compare_array[i2] = Rnd(TNetwork.schwellwert_0,TNetwork.schwellwert_1)
+		Else
+			'verbindungen
+			Local i:Int = Rand(0,Self.middle_layers.length-1)
+			Local x:Int = Rand(0,Self.middle_layers[i].in-1)
+			Local y:Int = Rand(0,Self.middle_layers[i].out-1)
+			
+			Self.middle_layers[i].connections_feld[x,y] = Rnd()*2.0-1.0
+		End If
+	End Method
+
+	Field col_factor:Float = 1.0
+	
+	Method draw(vx:Int,vy:Int)
+		SetColor 255,255,255
+		
+		Local max_col:Float = 0
+		
+		For Local i:Int = 0 To Self.middle_layers.length-1
+			For Local i2:Int = 0 To Self.middle_layers[i].value_array.length-1
+				
+				SetColor 50,50,50
+				DrawRect vx+i2*50,vy+i*80,45,30
+				
+				If Self.middle_layers[i].value_array[i2] > Self.middle_layers[i].compare_array[i2] Or i=0 Then
+					SetColor 0,255,0
+				Else
+					SetColor 255,0,0
+				End If
+				
+				DrawText Mid(Self.middle_layers[i].value_array[i2],1,5),vx+i2*50,vy+i*80
+				If i>0 Then DrawText Mid(Self.middle_layers[i].compare_array[i2],1,5),vx+i2*50,vy+i*80+15
+				
+			Next
+			
+			For Local x:Int = 0 To Self.middle_layers[i].in-1
+				For Local y:Int = 0 To Self.middle_layers[i].out-1
+					Local col:Float = Abs(Self.middle_layers[i].connections_feld[x,y])
+					
+					If col > max_col Then max_col = col
+					
+					If Self.middle_layers[i].connections_feld[x,y]>0 Then
+						SetColor 0,col * Self.col_factor,0
+					Else
+						SetColor col * Self.col_factor,0,0
+					End If
+					
+					DrawLine vx+x*50+20,vy+i*80+30,vx+y*50+20,vy+(i+1)*80
+				Next
+			Next
+		Next
+		
+		For Local i2:Int = 0 To Self.out.value_array.length-1
+			SetColor 50,50,50
+			DrawRect vx+i2*50,vy+Self.middle_layers.length*80,45,30
+			SetColor 255,255,0
+			DrawText Mid(Self.out.value_array[i2],1,5),vx+i2*50,vy+Self.middle_layers.length*80
+		Next
+		
+		Self.col_factor = 255.0/max_col
+		
+	End Method
+End Type
+
+' ##########################################################
+
+Type TLayer
+	Field value_array:Float[]
+	
+	Field in:Int
+	
+	Function Create_l:TLayer(length:Int)'create
+		Local l:TLayer = New TLayer
+		
+		l.in = length
+		l.value_array = New Float[length]
+		
+		Return l
+	End Function
+	
+	Method copy:TLayer()'copy
+		Local l:TLayer = New TLayer
+		
+		l.in = Self.in
+		
+		l.value_array = New Float[l.in]
+		
+		For Local i:Int = 0 To l.in-1
+			l.value_array[i] = Self.value_array[i]
+		Next
+		
+		Return l
+	End Method
+End Type
+
+' ##########################################################
+
+Type TLayer_Middle Extends TLayer
+	Field compare_array:Float[]
+	Field connections_feld:Float[,]
+	
+	Field out:Int
+	
+	Function Create_m:TLayer_Middle(length_in:Int,length_out:Int)'create
+		Local l:TLayer_Middle = New TLayer_Middle
+		
+		l.out = length_out
+		l.in = length_in
+		
+		l.value_array = New Float[l.in]
+		l.compare_array = New Float[l.in]
+		
+		For Local i:Int = 0 To l.in-1
+			l.compare_array[i] = 0'Rnd(TNetwork.schwellwert_0,TNetwork.schwellwert_1)
+		Next
+		
+		l.connections_feld = New Float[l.in, l.out]
+		
+		For Local x:Int = 0 To l.in-1
+			For Local y:Int = 0 To l.out-1
+				l.connections_feld[x,y] = 0'Rnd()*2.0-1.0
+			Next
+		Next
+		
+		Return l
+	End Function
+	
+	Method copy:TLayer_Middle()'copy
+		Local l:TLayer_Middle = New TLayer_Middle
+		
+		l.out = Self.out
+		l.in = Self.in
+		
+		'oa
+		l.value_array = New Float[l.in]
+		
+		For Local i:Int = 0 To l.in-1
+			l.value_array[i] = Self.value_array[i]
+		Next
+		
+		'ca
+		l.compare_array = New Float[l.in]
+		
+		For Local i:Int = 0 To l.in-1
+			l.compare_array[i] = Self.compare_array[i]
+		Next
+		
+		'cf
+		l.connections_feld = New Float[l.in, l.out]
+		
+		For Local x:Int = 0 To l.in-1
+			For Local y:Int = 0 To l.out-1
+				l.connections_feld[x,y] = Self.connections_feld[x,y]
+			Next
+		Next
+		
+		Return l
+	End Method
+	
+	Method compute_to(l:TLayer)
+		For Local y:Int = 0 To Self.out-1
+			l.value_array[y] = 0
+			For Local x:Int = 0 To Self.in-1
+				l.value_array[y]:+Self.connections_feld[x,y]*(Self.value_array[x] >= Self.compare_array[x])
+			Next
+		Next
+	End Method
+	
+	Method compute_start_to(l:TLayer)
+		For Local y:Int = 0 To Self.out-1
+			l.value_array[y] = 0
+			For Local x:Int = 0 To Self.in-1
+				l.value_array[y]:+Self.connections_feld[x,y]*Self.value_array[x]
+			Next
+		Next
+	End Method
+End Type
+
+Type ARRAY
+	Function getmax:Int(a:Float[])
+		Local maximum:Int = 0
+		Local summe:Float = 0
+		
+		For Local i:Int = 0 To a.length-1
+			If a[i]>=a[maximum] Then maximum = i
+			summe:+a[i]
+		Next
+		
+		Return maximum
+	End Function
+	
+	Function sum:Int(a:Float[])
+		Local summe:Float = 0
+		
+		For Local i:Int = 0 To a.length-1
+			summe:+a[i]
+		Next
+		
+		Return summe
+	End Function
+End Type
+
+'######################################################################################
+
+Type TRobot
+	Global list:TList
+	
+	Field x:Float
+	Field y:Float
+	Field w:Float
+	
+	Field name:String
+	
+	Field food:Float
+	
+	Field points:Float
+	
+	Field inputs:Float[3]
+	Field inputs_2:Float[3]
+	Field inputs_3:Float[3]
+	
+	Field net:TNetwork
+	
+	Function Create:TRobot(x:Float,y:Float,name:String)
+		Local r:TRobot = New TRobot
+		
+		r.x = x
+		r.y = y
+		r.food = 100.0
+		r.points = 0
+		
+		r.name = name
+		
+		r.net = TNetwork.Create([9,4,2])'[18,1,2]
+		
+		Return r
+	End Function
+	
+	Method render()
+		Self.points:+1.0
+		Self.food:-0.2
+		
+		'# food sensors
+		For Local i:Int = 0 To 2
+			Self.inputs[i]=0
+		Next
+		
+		For Local f:TFood = EachIn TFood.list
+			Local alpha:Float = ((((ATan2(f.y-Self.y,f.x-Self.x)-Self.w) Mod 360.0)+360) Mod 360)
+			
+			Local d:Float = ((f.y-Self.y)^2+(f.x-Self.x)^2)^0.5
+			
+			If d<10 Then
+				f.x = Rnd()*800+100
+				f.y = Rnd()*600+100
+				
+				Self.food:+10.0
+			Else
+				Local power:Float = 1000.0/d^2
+				
+				'Print alpha
+				'Print Floor(alpha/60.0)
+				
+				Self.inputs[((Floor(alpha/120.0)+3) Mod 3)]:+power
+				'Self.inputs[((Floor(alpha/120.0)+1+3) Mod 3)]:+power*0.2
+				'Self.inputs[((Floor(alpha/120.0)-1+3) Mod 3)]:+power*0.2
+			End If
+		Next
+		'# food sensors end
+		
+		'# border sensors
+		For Local i:Int = 0 To 2
+			Self.inputs_2[i]=0
+		Next
+		
+		Local alpha:Float
+		Local d:Float
+		Local power:Float
+		
+		'# 1 Graphics 1000,780
+		alpha = ((((180-Self.w) Mod 360.0)+360) Mod 360)
+		
+		d = Self.x
+		
+		power = 10000.0/d^2
+		
+		Self.inputs_2[((Floor(alpha/120.0)+3) Mod 3)]:+power
+		'Self.inputs_2[((Floor(alpha/120.0)+1+3) Mod 3)]:+power*0.2
+		'Self.inputs_2[((Floor(alpha/120.0)-1+3) Mod 3)]:+power*0.2
+		
+		'# 2 Graphics 1000,780
+		alpha = ((((-Self.w) Mod 360.0)+360) Mod 360)
+		
+		d = 1000-Self.x
+		
+		power = 10000.0/d^2
+		
+		Self.inputs_2[((Floor(alpha/120.0)+3) Mod 3)]:+power
+		'Self.inputs_2[((Floor(alpha/120.0)+1+3) Mod 3)]:+power*0.2
+		'Self.inputs_2[((Floor(alpha/120.0)-1+3) Mod 3)]:+power*0.2
+		
+		'# 3 Graphics 1000,780
+		alpha = ((((270-Self.w) Mod 360.0)+360) Mod 360)
+		
+		d = Self.y
+		
+		power = 10000.0/d^2
+		
+		Self.inputs_2[((Floor(alpha/120.0)+3) Mod 3)]:+power
+		'Self.inputs_2[((Floor(alpha/120.0)+1+3) Mod 3)]:+power*0.2
+		'Self.inputs_2[((Floor(alpha/120.0)-1+3) Mod 3)]:+power*0.2
+		
+		'# 4 Graphics 1000,780
+		alpha = ((((90-Self.w) Mod 360.0)+360) Mod 360)
+		
+		d = 780-Self.y
+		
+		power = 10000.0/d^2
+		
+		Self.inputs_2[((Floor(alpha/120.0)+3) Mod 3)]:+power
+		'Self.inputs_2[((Floor(alpha/120.0)+1+3) Mod 3)]:+power*0.2
+		'Self.inputs_2[((Floor(alpha/120.0)-1+3) Mod 3)]:+power*0.2
+		
+		'# border sensors end
+		
+		
+		'# tobot sensors
+		For Local i:Int = 0 To 2
+			Self.inputs_3[i]=0
+		Next
+		
+		For Local r:TRobot = EachIn TRobot.list
+			If r = Self Then Continue
+			
+			Local alpha:Float = ((((ATan2(r.y-Self.y,r.x-Self.x)-Self.w) Mod 360.0)+360) Mod 360)
+			
+			Local d:Float = ((r.y-Self.y)^2+(r.x-Self.x)^2)^0.5
+			
+			Local power:Float = 10000.0/d^2
+			
+			If r.food > Self.food Then power=-power
+			
+			If d < 30 And r.food > Self.food Then
+				r.food:+0.1
+				Self.food:-0.1
+			EndIf
+			
+			Self.inputs_3[((Floor(alpha/120.0)+3) Mod 3)]:+power
+			'Self.inputs_3[((Floor(alpha/120.0)+1+3) Mod 3)]:+power*0.2
+			'Self.inputs_3[((Floor(alpha/120.0)-1+3) Mod 3)]:+power*0.2
+			
+		Next
+		'# tobot sensors end
+		
+		
+		Local out:Float[] = Self.net.compute(Self.inputs + Self.inputs_2 + Self.inputs_3)
+		
+		If out[0]>0.1 Then Self.w:+15.0
+		If out[0]<-0.1 Then Self.w:-15.0
+		
+		If out[1] < 0 Then Self.food:-1
+		
+		Self.food:-Abs(out[1]*0.1)
+		
+		out[1]:+1.5
+		
+		Self.x:+Cos(Self.w)*out[1]
+		Self.y:+Sin(Self.w)*out[1]
+	End Method
+	
+	Method draw()
+		
+		SetColor 100,100,100
+		DrawText Mid(Self.points,1,5),Self.x-20,Self.y-30
+		DrawText Mid(Self.food,1,5),Self.x-20,Self.y+10
+		SetColor 255,255,255
+		DrawText Self.name,Self.x-20,Self.y+30
+		
+		
+		SetColor 100,Self.food,0
+		DrawOval Self.x-10,Self.y-10,20,20
+		
+		SetColor 100,0,0
+		DrawOval Self.x+Cos(Self.w)*10-5,Self.y+Sin(Self.w)*10-5,10,10
+		
+		For Local i:Int = 0 To 2
+			SetColor 0,Self.inputs[i]*255.0,0
+			DrawOval Self.x+Cos(Self.w+60+120.0*i)*10-2,Self.y+Sin(Self.w+60+120.0*i)*10-2,4,4
+			
+			SetColor Self.inputs_2[i]*255.0,0,Self.inputs_2[i]*255.0
+			DrawOval Self.x+Cos(Self.w+60+120.0*i)*14-2,Self.y+Sin(Self.w+60+120.0*i)*14-2,4,4
+			
+			SetColor -Self.inputs_3[i]*255.0,Self.inputs_3[i]*255.0,Self.inputs_3[i]*255.0
+			DrawOval Self.x+Cos(Self.w+60+120.0*i)*18-2,Self.y+Sin(Self.w+60+120.0*i)*18-2,4,4
+		Next
+		
+		
+	End Method
+	
+	Method copy:TRobot(mutations:Int)
+		Local r:TRobot = New TRobot
+		
+		r.x = Self.x
+		r.y = Self.y
+		r.w = Self.w
+		
+		r.food = 100.0
+		r.points = 0
+		
+		r.net = Self.net.copy()
+		
+		If mutations>0 Then
+			For Local i:Int = 1 To mutations
+				r.net.mutate()
+			Next
+			r.name = Self.name+Chr(Rand(65,80))
+		Else
+			r.name = Self.name
+		End If
+		
+		If Len(r.name) > 20 Then
+				r.name = Mid(r.name,5,-1) + "-"
+		EndIf
+		
+		Return r
+	End Method
+	
+	' ################### SAVE ####################
+	Method save(file_name:String)
+		Local file:TStream = WriteFile("saves\"+file_name)
+		
+		'MIDDLE LAYER
+		file.WriteInt(Self.net.middle_layers.length)
+		
+		For Local i:Int = 0 To Self.net.middle_layers.length-1
+			file.WriteInt(Self.net.middle_layers[i].in)
+			file.WriteInt(Self.net.middle_layers[i].out)
+			
+			For Local i2:Int = 0 To Self.net.middle_layers[i].in-1
+				file.WriteFloat(Self.net.middle_layers[i].value_array[i2])
+				file.WriteFloat(Self.net.middle_layers[i].compare_array[i2])
+				
+				For Local i3:Int = 0 To Self.net.middle_layers[i].out-1
+					file.WriteFloat(Self.net.middle_layers[i].connections_feld[i2,i3])
+				Next
+			Next
+		Next
+		
+		'OUT LAYER
+		file.WriteInt(Self.net.out.in)
+		
+		For Local i:Int = 0 To Self.net.out.in-1
+			file.WriteFloat(Self.net.out.value_array[i])
+		Next
+		
+		CloseFile(file)
+	End Method
+	
+	
+	' ################### LOAD ####################
+	Function Load:TRobot(file_name:String,x:Float,y:Float)
+		Local r:TRobot = New TRobot
+		
+		r.x = x
+		r.y = y
+		r.food = 100.0
+		r.points = 0
+		
+		Local file:TStream = ReadFile("saves\"+file_name)
+		
+		'MIDDLE LAYER
+		r.net = New TNetwork
+		r.net.middle_layers = New TLayer_Middle[file.ReadInt()]'file.WriteInt(Self.net.middle_layers.length)
+		
+		For Local i:Int = 0 To r.net.middle_layers.length-1
+			Print i
+			r.net.middle_layers[i] = New TLayer_Middle
+			r.net.middle_layers[i].in = file.ReadInt()'file.WriteInt(Self.net.middle_layers[i].in)
+			r.net.middle_layers[i].out = file.ReadInt()'file.WriteInt(Self.net.middle_layers[i].out)
+			
+			r.net.middle_layers[i].value_array = New Float[r.net.middle_layers[i].in]
+			r.net.middle_layers[i].compare_array = New Float[r.net.middle_layers[i].in]
+			r.net.middle_layers[i].connections_feld = New Float[r.net.middle_layers[i].in,r.net.middle_layers[i].out]
+			
+			For Local i2:Int = 0 To r.net.middle_layers[i].in-1
+				r.net.middle_layers[i].value_array[i2] = file.ReadFloat()'file.WriteFloat(Self.net.middle_layers[i].value_array[i2])
+				r.net.middle_layers[i].compare_array[i2] = file.ReadFloat()'file.WriteFloat(Self.net.middle_layers[i].compare_array[i2])
+				
+				For Local i3:Int = 0 To r.net.middle_layers[i].out-1
+					r.net.middle_layers[i].connections_feld[i2,i3] = file.ReadFloat()'file.WriteFloat(Self.net.middle_layers[i].connections_feld[i2,i3])
+				Next
+			Next
+		Next
+		
+		'OUT LAYER
+		r.net.out = New TLayer
+		r.net.out.in = file.ReadInt()'file.WriteInt(Self.net.out.in)
+		r.net.out.value_array = New Float[r.net.out.in]
+		For Local i:Int = 0 To r.net.out.in-1
+			r.net.out.value_array[i] = file.ReadFloat()'file.WriteFloat(Self.net.out.value_array[i])
+		Next
+		
+		CloseFile(file)
+		
+		Return r
+	End Function
+End Type
+
+Type TFood
+	Global list:TList
+	
+	Field x:Float
+	Field y:Float
+	
+	Function Create:TFood(x:Float,y:Float)
+		Local f:TFood = New TFood
+		
+		f.x = x
+		f.y = y
+		
+		Return f
+	End Function
+	
+	Method draw()
+		SetColor 100,255,100
+		DrawRect Self.x-3,Self.y-3,6,6
+	End Method
+End Type
+
+Graphics 1000,780
+SetClsColor 0,0,0
+SeedRnd MilliSecs()
+
+TFood.list = New TList
+
+TRobot.list = New TList
+
+For Local i:Int = 1 To 40
+	TFood.list.addlast(TFood.Create(Rnd()*800.0+100,Rnd()*600.0+100))
+Next
+
+For Local i:Int = 1 To 20
+	'TRobot.list.addlast(TRobot.Load("best.txt",Rnd()*800.0+100,Rnd()*600.0+100))
+	TRobot.list.addlast(TRobot.Create(Rnd()*800.0+100,Rnd()*600.0+100,String(i)))
+Next
+
+Local best_robot:TRobot
+
+Local counter:Int = 0
+
+
+Repeat
+	counter:+1
+	
+	Local space:Int = KeyDown(key_space)
+	
+	If space Then Cls
+	
+	If space Then
+		
+		If best_robot Then
+			SetColor 50,50,50
+			DrawRect best_robot.x,0,1,780
+			DrawRect 0,best_robot.y,1000,1
+		End If
+		
+		For Local f:TFood = EachIn TFood.list
+			f.draw()
+		Next
+	End If
+	
+	
+	For Local r:TRobot = EachIn TRobot.list
+		r.render()
+		If space Then r.draw()
+		
+		If r.food < 0 Or r.x<-20 Or r.y<-20 Or r.x>1020 Or r.y>800 Then
+			best_robot = Null
+			For Local r2:TRobot = EachIn TRobot.list
+				If Not best_robot Or best_robot.points < r2.points Then
+					best_robot = r2
+					best_robot.save("best.txt")
+					'TRobot'Method save(file_name:String)'Function Load:TRobot(file_name:String,x:Float,y:Float)
+				End If
+			Next
+			
+			TRobot.list.remove(r)
+			r = best_robot.copy(Rand(0,10))
+			TRobot.list.addlast(r)
+			r.x = Rnd()*800.0+100
+			r.y = Rnd()*600.0+100
+		End If
+	Next
+	
+	If space Then
+		If best_robot Then
+			SetColor 0,255,0
+			DrawText best_robot.name,10,10
+			SetColor 0,255,0
+			DrawText best_robot.points,10,30
+			best_robot.net.draw(5,50)
+		End If
+		
+		SetColor 100,100,100
+		DrawText counter,500,50
+		
+		Flip
+	End If
+Until KeyHit(key_escape)
+
+End

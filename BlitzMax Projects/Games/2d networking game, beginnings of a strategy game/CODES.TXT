@@ -1,0 +1,40 @@
+immer 3 buchstaben, danach parameter
+
+ - (noch) nicht implementiert
+
+"UO?" : 0 parameter : ist udp ok?
+"UO!" : 0 parameter : udp ok!
+
+"UPI" : 1 parameter (udp-port) : udp port ist
+
+"MAP" : 1 parameter (map-name)
+
+"SMN" : 1 parameter (name) : set my name
+
+ - "SPN" : 2 parameter (id, name) : set player name
+
+"SMC" : 3 parameter (r, g, b) : set my color
+
+"NPL" : anz-player parameter (data) : new player list
+
+"YPI" : 1 parameter (id) : your player id
+
+"YPD" : 1 parameter (minerals) : your player data
+
+"SOD" : 2 parameter (daten-typ, data) : set object data
+
+"RFO" : 1 parameter (id) : request for object
+
+"OID" : 1 parameter (id) : object is dead
+
+"SAO" : 2 parameter (x,y) : set an object
+
+"SOT" : 4 parameter (id, x, y, r) : send object to
+
+"AWP" : 4 parameter (id, x, y, r) : add way point
+
+"CHT" : 3 parameter (from_id, to_obtion, txt) : Chat; option: 0=all, 1=team
+
+"STP" : 1 parameter (id) : stop
+
+"SDM" : 1 parameter (id-drone) : send drone to mineral-mining

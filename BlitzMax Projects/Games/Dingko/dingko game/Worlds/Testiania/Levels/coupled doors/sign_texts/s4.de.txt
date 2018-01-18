@@ -1,0 +1,4 @@
+Dieses @r@Feuer@w@ koennte man brauchen um Holz wegzubrennen...
+Versuche diese @b@blauen@w@ Bloecke zum erscheinen zu bringen.
+Es gibt einen Schalter daruer rechts aber auch links.
+Du musst die @p@pinken@w@ Lichter anschalten.

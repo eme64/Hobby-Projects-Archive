@@ -1,0 +1,40 @@
+music cell
+
+cls
+image 0
+flip
+
+delay 7300
+
+cls
+image 1
+flip
+
+
+delay 7200
+
+cls
+image 2
+flip
+
+delay 7200
+
+cls
+image 3
+flip
+
+delay 7200
+
+cls
+image 4
+flip
+
+delay 7100
+
+cls
+image 5
+flip
+
+delay 7000
+
+music out

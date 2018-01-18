@@ -1,0 +1,2 @@
+Whenever you want you can @b@ice@w@ yourself by hitting @o@[%_sys_ability%] @w@ if you are water.
+If you are @b@ice@w@ and move, you become normal again.

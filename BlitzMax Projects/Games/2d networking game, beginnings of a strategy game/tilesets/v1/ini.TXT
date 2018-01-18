@@ -1,0 +1,10 @@
+20
+2
+1
+gras.png
+1
+2
+wasser.png
+3
+3
+felsen.png

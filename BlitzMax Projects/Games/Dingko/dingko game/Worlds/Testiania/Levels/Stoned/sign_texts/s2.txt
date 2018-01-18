@@ -1,0 +1,4 @@
+@orange@Remember:@white@
+To the @orange@left@white@: Activate Bullhead
+To the @orange@right@white@: Destroy all the Stone
+And in the end go to @orange@the bottom of the cave!@white@

@@ -1,0 +1,2 @@
+@b@Wasser@w@ + @r@Feuer@w@ = @b@Dampf@w@.
+Seh dir doch ein Mal das @r@Thermometer@w@ im oberen, linken Ecken an.

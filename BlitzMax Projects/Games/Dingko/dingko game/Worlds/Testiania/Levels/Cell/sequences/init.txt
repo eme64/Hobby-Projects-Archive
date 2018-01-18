@@ -1,0 +1,135 @@
+# ###### IMAGE 0 #####
+music wn
+
+cls
+image 0
+flip
+
+delay 1000
+
+music I1
+
+cls
+image 0
+goto_if %_sys_language% English mark0
+image 0s 0 0
+:mark0
+flip
+
+
+delay 9700
+
+
+
+# ###### IMAGE 1 #####
+music wn
+
+cls
+image 1
+flip
+
+delay 1000
+
+music I2
+
+cls
+image 1
+goto_if %_sys_language% English mark1
+image 1s 0 0
+:mark1
+flip
+
+delay 8500
+
+
+
+# ###### IMAGE 2 #####
+music wn
+
+cls
+image 2
+flip
+
+delay 1000
+
+music I3
+
+cls
+image 2
+goto_if %_sys_language% English mark2
+image 2s 0 0
+:mark2
+flip
+
+delay 11300
+
+
+
+
+# ###### IMAGE 3 #####
+music wn
+
+cls
+image 3
+flip
+
+delay 1000
+
+music I4
+
+cls
+image 3
+goto_if %_sys_language% English mark3
+image 3s 0 0
+:mark3
+flip
+
+delay 9000
+
+
+
+
+# ###### IMAGE 4 #####
+music wn
+
+cls
+image 4
+flip
+
+delay 1000
+
+music I5
+
+cls
+image 4
+goto_if %_sys_language% English mark4
+image 4s 0 0
+:mark4
+flip
+
+delay 8700
+
+
+
+# ###### IMAGE 5 #####
+music wn
+
+cls
+image 5
+flip
+
+delay 1000
+
+music I6
+
+cls
+image 5
+goto_if %_sys_language% English mark5
+image 5s 0 0
+:mark5
+flip
+
+delay 8500
+
+music out
+levelcomplete

@@ -1,0 +1,2 @@
+@b@water@w@ + @r@fire@w@ = @b@steam@w@.
+Have a look at the @r@thermometer@w@ in the top left corner.

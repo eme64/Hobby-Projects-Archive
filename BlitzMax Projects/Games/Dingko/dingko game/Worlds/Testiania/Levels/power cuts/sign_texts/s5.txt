@@ -1,0 +1,1 @@
+It must be possible to open the door to the right.

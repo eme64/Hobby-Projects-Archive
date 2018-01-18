@@ -1,0 +1,12 @@
+set v1 1
+set v2 0
+
+:top
+pause
+set v2 0
+goto_if %v1% %v2% low
+goto top
+
+:low
+set v2 1
+goto top

@@ -1,0 +1,309 @@
+;gfx-load
+If Not GfxModeExists(800,600,16)=1 Then
+	Print "zu schwache grafik... programm bitte beenden"
+	Repeat
+	Forever
+	End
+End If
+
+Graphics 800, 600,0,2
+SetBuffer BackBuffer ()
+
+SeedRnd MilliSecs()
+
+Global ramen_bild
+ramen_bild=LoadImage("bilder\ramen.bmp")
+Global rects_bilder
+Global anzahl_rects=4
+rects_bilder=LoadAnimImage("bilder\rect.bmp",50,50,0,anzahl_rects)
+
+Dim feld(9,12,6)
+
+
+Global cursor=1
+
+;main
+count=9
+Repeat
+	
+	
+	
+	If steuerung=0 Then
+		
+		For x=0 To 9
+			For y=0 To 12
+				feld(x,y,1)=0
+			Next
+		Next
+		
+		feld(4,0,0)=Rand(1,anzahl_rects-1)
+		feld(4,0,1)=1
+		
+		feld(5,0,0)=Rand(1,anzahl_rects-1)
+		feld(5,0,1)=1
+		cc=2
+		steuerung=1
+	End If
+	
+	;checken ob spezielles ereignis
+	For x=0 To 9
+		If feld(x,2,0)<>0 And feld(x,2,1)=0 Then game_over=1
+	Next
+	
+	
+	For y=0 To 12
+		For x=0 To 9
+			If feld(x,y,0)<>0 And feld(x,y,1)=0 Then
+				For yy=3 To 12
+					For xx=0 To 9
+						feld(xx,yy,4)=0
+					Next
+				Next
+				
+				Repeat
+					ok_2=1
+					ccc=0
+					For yy=0 To 12
+						For xx=0 To 9
+							If feld(xx,yy,0)<>0 And feld(xx,yy,1)=0 And feld(x,y,0)=feld(xx,yy,0) And feld(xx,yy,4)=0 Then
+								feld(xx,yy,4)=1
+							End If
+						Next
+					Next
+					Repeat
+						ok=1
+						
+						For yy=0 To 12
+							For xx=0 To 9
+								If feld(xx,yy,0)<>0 And feld(xx,yy,1)=0 And feld(x,y,0)=feld(xx,yy,0) And feld(xx,yy,4)=1 Then
+									antw=0
+									If xx<9 Then
+										If feld(xx+1,yy,4)=1 Or feld(xx+1,yy,4)=2 Then antw=1
+									End If
+									If xx>0 Then
+										If feld(xx-1,yy,4)=1 Or feld(xx-1,yy,4)=2 Then antw=1
+									End If
+									If yy<12 Then
+										If feld(xx,yy+1,4)=1 Or feld(xx,yy+1,4)=2 Then antw=1
+									End If
+									If yy>0 Then
+										If feld(xx,yy-1,4)=1 Or feld(xx,yy-1,4)=2 Then antw=1
+									End If
+									If antw=1 Then
+										
+										feld(xx,yy,4)=2
+										
+										ok=0
+										ccc=ccc+1
+									End If
+								End If
+							Next
+						Next
+					Until ok=1
+					
+					If cccc<ccc Then cccc=ccc
+					AppTitle cccc
+					
+					If ccc>3 Then
+						ok_2=0
+						For yy=0 To 12
+							For xx=0 To 9
+								If feld(xx,yy,4)=2 Then
+									feld(xx,yy,0)=0
+									feld(xx,yy,1)=0
+									feld(xx,yy,2)=2
+									feld(xx,yy,3)=0
+								End If
+							Next
+						Next
+					End If
+				Until ok_2=1
+
+				
+				
+				
+				
+				
+			Else
+				
+			End If
+		Next
+	Next
+	
+	;
+	
+	
+	
+	If KeyHit(205) Or KeyDown(205) Then ;cursor=cursor+1
+		c=0
+		For x=0 To 8
+			For y=0 To 11
+				If feld(x,y,1)=1 Then
+					If feld(x+1,y,1)=1 Or feld(x+1,y+1,0)=0 Then;feld(x+1,y,0)=0
+						c=c+1
+					End If
+				End If
+			Next
+		Next
+		If cc=c Then
+			For x=9 To 0 Step -1
+				For y=12 To 0 Step -1
+					If feld(x,y,1)=1 And x<9 Then
+						feld(x+1,y,0)=feld(x,y,0)
+						feld(x,y,0)=0
+						feld(x+1,y,1)=feld(x,y,1)
+						feld(x,y,1)=0
+						feld(x+1,y,2)=1
+						feld(x+1,y,3)=1
+						feld(x,y,2)=0
+					End If
+				Next
+			Next
+		End If
+	End If
+	
+	If KeyHit(203) Or KeyDown(203) Then ;cursor=cursor-1
+		c=0
+		For x=1 To 9
+			For y=0 To 11
+				If feld(x,y,1)=1 Then
+					If feld(x-1,y,1)=1 Or feld(x-1,y+1,0)=0 Then;feld(x-1,y,0)=0
+						c=c+1
+					End If
+				End If
+			Next
+		Next
+		If cc=c Then
+			For x=0 To 9
+				For y=12 To 0 Step -1
+					If feld(x,y,1)=1 And x>0 Then
+						feld(x-1,y,0)=feld(x,y,0)
+						feld(x,y,0)=0
+						feld(x-1,y,1)=feld(x,y,1)
+						feld(x,y,1)=0
+						feld(x-1,y,2)=1
+						feld(x-1,y,3)=-1
+						feld(x,y,2)=0
+					End If
+				Next
+			Next
+		End If
+	End If
+	ok=1
+	
+	
+	
+	If ok=1 Then;noch ersetzen
+		c=0
+		For y=11 To 0 Step -1
+			For x=9 To 0 Step -1
+				If feld(x,y,1)=1 Then
+					Select True
+						Case feld(x,y,0)=0
+						Case feld(x,y,0)>0 And feld(x,y,0)<anzahl_rects+1
+							If feld(x,y+1,0)=0 Then
+								c=c+1
+							End If
+						Case feld(x,y,0)=0
+					End Select
+				End If
+			Next
+		Next
+		;If c=cc Then
+			For y=11 To 0 Step -1
+				For x=9 To 0 Step -1
+					;If feld(x,y,1)=1 Then
+						Select True
+							Case feld(x,y,0)=0
+							Case feld(x,y,0)>0 And feld(x,y,0)<anzahl_rects+1
+								If feld(x,y+1,0)=0 Then
+									falle_platz(x,y)
+								End If
+							Case feld(x,y,0)=0
+						End Select
+					;End If
+				Next
+			Next
+		;Else
+		If c<>cc Then
+			steuerung=0
+			For x=0 To 9
+				For y=0 To 12
+					feld(x,y,1)=0
+				Next
+			Next
+		End If
+	End If
+	;bildaufbau
+	
+	
+	For i=0 To 48 Step 4
+		DrawBlock ramen_bild,0,0
+		Color 0,0,0
+		Text 0,0,cursor
+		For y=0 To 9
+			For x=0 To 9
+				Select feld(x,y+3,3)
+					Case -1
+						iii=50-i
+					Case 0
+						iii=0
+					Case 1
+						iii=i-50
+				End Select
+				Select feld(x,y+3,2)
+					Case 0
+						ii=0
+					Case 1
+						ii=i-50
+					Case 2
+						ii=0
+						Color 255,100,100
+						Rect 50+50*x+i/2,50+50*y+i/2,50-i,50-i,1
+						;Delay 10
+				End Select
+				Select True
+					Case feld(x,y+3,0)=0
+					Case feld(x,y+3,0)>0 And feld(x,y+3,0)<anzahl_rects+1
+						xxx=feld(x,y+3,0)+1
+						DrawBlock rects_bilder,50+50*x+iii,50+50*y+ii,feld(x,y+3,0)
+					Case feld(x,y+3,0)=0
+				End Select
+			Next
+		Next
+		Flip
+	Next
+	
+	For x=0 To 9
+		For y=0 To 12
+			feld(x,y,2)=0
+			feld(x,y,3)=0
+			If feld(x,y,0)=0 Then
+				feld(x,y,1)=0
+				
+			End If
+		Next
+	Next
+	
+	;ttt=MilliSecs()
+	;Repeat
+	;Until ttt+100<MilliSecs()
+	
+	;Flip
+	;bildaufbau ende
+	
+Until KeyHit(1) Or game_over=1
+End
+
+;functions
+Function falle_platz(x,y)
+	feld(x,y+1,0)=feld(x,y,0)
+	feld(x,y,0)=0
+	feld(x,y+1,1)=feld(x,y,1)
+	feld(x,y,1)=0
+	feld(x,y+1,3)=feld(x,y,3)
+	feld(x,y,3)=0
+	feld(x,y+1,2)=1
+	feld(x,y,2)=0
+End Function
+;datas

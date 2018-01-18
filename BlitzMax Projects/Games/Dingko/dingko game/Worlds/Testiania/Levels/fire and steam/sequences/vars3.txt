@@ -1,0 +1,12 @@
+set ds 1
+set ds2 0
+
+:top
+pause
+set ds2 0
+goto_if %ds% %ds2% low
+goto top
+
+:low
+set ds2 1
+goto top

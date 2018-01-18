@@ -1,0 +1,4 @@
+Wenn du jetzt kein Wasser mehr hast und nicht mehr weg kommst von hier,
+dann muss dein Wassertank leer sein.
+Druecke @o@[%_sys_suicide%] @w@um zum letzten Sicherungspunkt zu gelangen.
+Oder benutze @o@[%_sys_reload%] @w@um das Level neu zu starten.

@@ -1,0 +1,123 @@
+music wn
+
+cls
+image 0
+flip
+
+delay 1000
+
+music I1
+
+cls
+image 0
+flip
+
+
+delay 9700
+
+
+
+
+
+
+music wn
+
+cls
+image 1
+flip
+
+delay 1000
+
+music I2
+
+cls
+image 1
+flip
+
+delay 8500
+
+
+
+
+
+music wn
+
+cls
+image 2
+flip
+
+delay 1000
+
+music I3
+
+cls
+image 2
+flip
+
+delay 11300
+
+
+
+
+
+
+
+music wn
+
+cls
+image 3
+flip
+
+delay 1000
+
+music I4
+
+cls
+image 3
+flip
+
+delay 9000
+
+
+
+
+
+
+
+music wn
+
+cls
+image 4
+flip
+
+delay 1000
+
+music I5
+
+cls
+image 4
+flip
+
+delay 8700
+
+
+
+
+music wn
+
+cls
+image 5
+flip
+
+delay 1000
+
+music I6
+
+cls
+image 5
+flip
+
+delay 8500
+
+music out
+levelcomplete

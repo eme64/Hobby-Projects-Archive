@@ -1,0 +1,4 @@
+@orange@Merke dir:@white@
+Auf der @orange@linken@white@ Seite: Aktiviere den Stierkopf
+Auf der @orange@rechten@white@: Zertruemmere alle Steine
+Und abschliessend gehe der Hoehle @orange@auf den Grund@white@

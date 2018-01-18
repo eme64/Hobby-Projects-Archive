@@ -1,0 +1,35 @@
+
+set t4 1
+
+set j2 1
+
+
+:top
+
+
+set j2 0
+
+pause
+
+
+
+goto_if %t4% 0 action_j2
+
+goto top
+
+
+
+
+:action_j2
+
+
+set j2 1
+
+pause
+
+goto_if %t4% 1 top
+
+goto action_j2
+
+
+

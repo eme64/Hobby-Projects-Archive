@@ -1,0 +1,4 @@
+Sometimes it is best not to jump to high.
+You can see the @r@charge-bar@w@ in the top left corner as well.
+It will charge when you press @o@[%_sys_up%]@w@.
+Try to find out the right power to get through.

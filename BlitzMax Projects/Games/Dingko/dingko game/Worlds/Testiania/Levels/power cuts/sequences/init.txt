@@ -1,0 +1,43 @@
+lh 100 100 100
+
+:top
+
+set v1 1
+wait 5000
+
+set v1 0
+sound knack1
+wait 50
+print p
+
+
+set v1 1
+wait 10000
+
+set v1 0
+sound knack1
+wait 50
+print p
+
+
+set v1 1
+wait 3000
+
+set v1 0
+sound knack1
+wait 50
+print p
+
+
+set v1 1
+wait 7000
+
+set v1 0
+sound knack1
+wait 50
+print p
+
+
+
+
+goto top

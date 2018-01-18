@@ -1,0 +1,12 @@
+set fd 1
+set fd2 0
+
+:top
+pause
+set fd2 0
+goto_if %fd% %fd2% low
+goto top
+
+:low
+set fd2 1
+goto top
