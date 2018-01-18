@@ -6,4 +6,4 @@ Red: LControl and Alt
 Green: currsor keys (left right)
 Blue: *- of numpad
 
-![alt text](https://github.com/eme64/Hobby-Projects-Archive/blob/master/Blitz3D/AdK!/img.png)
+[[https://github.com/username/repository/blob/master/img/octocat.png|alt=octocat]]
