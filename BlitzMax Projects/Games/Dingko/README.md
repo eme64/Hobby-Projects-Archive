@@ -1,6 +1,7 @@
 This may be my biggest project ever, it was a school-project.
 
 I also found a draft of the report, which you should check out for more details and pictures (in German).
+https://github.com/eme64/Hobby-Projects-Archive/blob/master/BlitzMax%20Projects/Games/Dingko/Report.pdf
 
 It was a collaboration with a High-School friend at the time who did all the graphics.
 
