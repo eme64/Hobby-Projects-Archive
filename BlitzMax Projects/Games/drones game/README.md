@@ -27,4 +27,6 @@ debug mode, turned off light engine:
 ![alt tag](https://github.com/eme64/Hobby-Projects-Archive/blob/master/BlitzMax%20Projects/Games/drones%20game/img3.png?raw=true "drones")
 ![alt tag](https://github.com/eme64/Hobby-Projects-Archive/blob/master/BlitzMax%20Projects/Games/drones%20game/img4.png?raw=true "drones")
 ![alt tag](https://github.com/eme64/Hobby-Projects-Archive/blob/master/BlitzMax%20Projects/Games/drones%20game/img5.png?raw=true "drones")
+
+AI finding the right room when navigated:
 ![alt tag](https://github.com/eme64/Hobby-Projects-Archive/blob/master/BlitzMax%20Projects/Games/drones%20game/img6.png?raw=true "drones")
