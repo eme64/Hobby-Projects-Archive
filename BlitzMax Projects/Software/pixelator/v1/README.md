@@ -1,4 +1,4 @@
-This is an other cool project, it also shows off the GUI I once programmed.
+This is an other cool project, it also shows off the GUI I once programmed (completely, from the base up).
 
 The idea was to create pixel-images, but where each pixel can have more characted, or even glow
 
